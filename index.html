@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Virtual Harmonium</title>
+    <title>CS109 Final Project - Sonya Jin</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     
 </head>
 <body>
 
-    <div id="bachScore" class="sl">Bach likeness score: <span id="scoreValue">0</span></div>
+    <div id="bachScore" class="sl">Predicted probability of Bach: <span id="scoreValue">0</span></div>
+
     <div id="update-message"></div>
+
     <div id="suggest-note-container">
       <div class="container">    
           <div class="btn" onclick="suggestNote();">
@@ -19,91 +21,91 @@
           </div>
       </div>
     </div>
-
+    <button id="playCompositionButton" onclick="playNotesSequence()">Play Composition</button>
     <div class="harmonium">
       <div class="white-keys">
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/01.wav', 1)" data-note = "1"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/03.wav', 3)" data-note = "3"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/05.wav', 5)" data-note = "5"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/06.wav', 6)" data-note = "6"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/08.wav', 8)" data-note = "8"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/10.wav', 10)" data-note = "10"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/12.wav', 12)" data-note = "12"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/13.wav', 13)" data-note = "13"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/15.wav', 14)" data-note = "14"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/17.wav', 16)" data-note = "16"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/18.wav', 18)" data-note = "18"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/20.wav', 19)" data-note = "19"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/22.wav', 21)" data-note = "21"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/24.wav', 23)" data-note = "23"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/25.wav', 25)" data-note = "25"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/27.wav', 26)" data-note = "26"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/29.wav', 28)" data-note = "28"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/30.wav', 30)" data-note = "30"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/32.wav', 31)" data-note = "31"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/34.wav', 33)" data-note = "33"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/36.wav', 35)" data-note = "35"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/37.wav', 37)" data-note = "37"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/39.wav', 38)" data-note = "38"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/41.wav', 40)" data-note = "40"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/42.wav', 42)" data-note = "42"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/44.wav', 43)" data-note = "43"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/46.wav', 45)" data-note = "45"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/48.wav', 47)" data-note = "47"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/49.wav', 49)" data-note = "49"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/51.wav', 50)" data-note = "50"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/53.wav', 52)" data-note = "52"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/54.wav', 54)" data-note = "54"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/56.wav', 55)" data-note = "55"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/58.wav', 57)" data-note = "57"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/60.wav', 59)" data-note = "59"></div>
-        <div class="white" onmousedown="key('https://barrycap.com/sounds/harmonium/61.wav', 61)" data-note = "61"></div>
+        <div class="white" onmousedown="key('/sounds/1.wav', 1)" data-note="1"></div>
+        <div class="white" onmousedown="key('/sounds/3.wav', 3)" data-note="3"></div>
+        <div class="white" onmousedown="key('/sounds/5.wav', 5)" data-note="5"></div>
+        <div class="white" onmousedown="key('/sounds/6.wav', 6)" data-note="6"></div>
+        <div class="white" onmousedown="key('/sounds/8.wav', 8)" data-note="8"></div>
+        <div class="white" onmousedown="key('/sounds/10.wav', 10)" data-note="10"></div>
+        <div class="white" onmousedown="key('/sounds/12.wav', 12)" data-note="12"></div>
+        <div class="white" onmousedown="key('/sounds/13.wav', 13)" data-note="13"></div>
+        <div class="white" onmousedown="key('/sounds/14.wav', 14)" data-note="14"></div>
+        <div class="white" onmousedown="key('/sounds/16.wav', 16)" data-note="16"></div>
+        <div class="white" onmousedown="key('/sounds/18.wav', 18)" data-note="18"></div>
+        <div class="white" onmousedown="key('/sounds/19.wav', 19)" data-note="19"></div>
+        <div class="white" onmousedown="key('/sounds/21.wav', 21)" data-note="21"></div>
+        <div class="white" onmousedown="key('/sounds/23.wav', 23)" data-note="23"></div>
+        <div class="white" onmousedown="key('/sounds/25.wav', 25)" data-note="25"></div>
+        <div class="white" onmousedown="key('/sounds/26.wav', 26)" data-note="26"></div>
+        <div class="white" onmousedown="key('/sounds/28.wav', 28)" data-note="28"></div>
+        <div class="white" onmousedown="key('/sounds/30.wav', 30)" data-note="30"></div>
+        <div class="white" onmousedown="key('/sounds/31.wav', 31)" data-note="31"></div>
+        <div class="white" onmousedown="key('/sounds/33.wav', 33)" data-note="33"></div>
+        <div class="white" onmousedown="key('/sounds/35.wav', 35)" data-note="35"></div>
+        <div class="white" onmousedown="key('/sounds/37.wav', 37)" data-note="37"></div>
+        <div class="white" onmousedown="key('/sounds/38.wav', 38)" data-note="38"></div>
+        <div class="white" onmousedown="key('/sounds/40.wav', 40)" data-note="40"></div>
+        <div class="white" onmousedown="key('/sounds/42.wav', 42)" data-note="42"></div>
+        <div class="white" onmousedown="key('/sounds/43.wav', 43)" data-note="43"></div>
+        <div class="white" onmousedown="key('/sounds/45.wav', 45)" data-note="45"></div>
+        <div class="white" onmousedown="key('/sounds/47.wav', 47)" data-note="47"></div>
+        <div class="white" onmousedown="key('/sounds/49.wav', 49)" data-note="49"></div>
+        <div class="white" onmousedown="key('/sounds/50.wav', 50)" data-note="50"></div>
+        <div class="white" onmousedown="key('/sounds/52.wav', 52)" data-note="52"></div>
+        <div class="white" onmousedown="key('/sounds/54.wav', 54)" data-note="54"></div>
+        <div class="white" onmousedown="key('/sounds/55.wav', 55)" data-note="55"></div>
+        <div class="white" onmousedown="key('/sounds/57.wav', 57)" data-note="57"></div>
+        <div class="white" onmousedown="key('/sounds/59.wav', 59)" data-note="59"></div>
+        <div class="white" onmousedown="key('/sounds/61.wav', 61)" data-note="61"></div>
       </div>
       <div class="black-keys">
         <div class="keys-2">
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/02.wav', 2)" data-note = "2"></div>
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/04.wav', 4)" data-note = "4"></div>
+          <div class="black" onmousedown="key('/sounds/2.wav', 2)" data-note="2"></div>
+          <div class="black" onmousedown="key('/sounds/4.wav', 4)" data-note="4"></div>
         </div>
         <div class="keys-3">
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/07.wav', 7)" data-note = "7"></div>
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/09.wav', 9)" data-note = "9"></div>
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/11.wav', 11)" data-note = "11"></div>
+          <div class="black" onmousedown="key('/sounds/7.wav', 7)" data-note="7"></div>
+          <div class="black" onmousedown="key('/sounds/9.wav', 9)" data-note="9"></div>
+          <div class="black" onmousedown="key('/sounds/11.wav', 11)" data-note="11"></div>
         </div>
         <div class="keys-2">
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/14.wav', 15)" data-note = "15"></div>
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/16.wav', 17)" data-note = "17"></div>
+          <div class="black" onmousedown="key('/sounds/14.wav', 14)" data-note="14"></div>
+          <div class="black" onmousedown="key('/sounds/17.wav', 17)" data-note="17"></div>
         </div>
         <div class="keys-3">
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/19.wav', 20)" data-note = "20"></div>
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/21.wav', 22)" data-note = "22"></div>
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/23.wav', 24)" data-note = "24"></div>
+          <div class="black" onmousedown="key('/sounds/20.wav', 20)" data-note="20"></div>
+          <div class="black" onmousedown="key('/sounds/22.wav', 22)" data-note="22"></div>
+          <div class="black" onmousedown="key('/sounds/24.wav', 24)" data-note="24"></div>
         </div>
         <div class="keys-2">
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/26.wav', 27)" data-note = "27"></div>
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/28.wav', 29)" data-note = "29"></div>
+          <div class="black" onmousedown="key('/sounds/27.wav', 27)" data-note="27"></div>
+          <div class="black" onmousedown="key('/sounds/29.wav', 29)" data-note="29"></div>
         </div>
         <div class="keys-3">
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/31.wav', 32)" data-note = "32"></div>
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/33.wav', 34)" data-note = "34"></div>
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/35.wav', 36)" data-note = "36"></div>
+          <div class="black" onmousedown="key('/sounds/32.wav', 32)" data-note="32"></div>
+          <div class="black" onmousedown="key('/sounds/34.wav', 34)" data-note="34"></div>
+          <div class="black" onmousedown="key('/sounds/36.wav', 36)" data-note="36"></div>
         </div>
         <div class="keys-2">
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/38.wav', 39)" data-note = "39"></div>
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/40.wav', 41)" data-note = "41"></div>
+          <div class="black" onmousedown="key('/sounds/39.wav', 39)" data-note="39"></div>
+          <div class="black" onmousedown="key('/sounds/41.wav', 41)" data-note="41"></div>
         </div>
         <div class="keys-3">
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/43.wav', 44)" data-note = "44"></div>
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/45.wav', 46)" data-note = "46"></div>
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/47.wav', 48)" data-note = "48"></div>
+          <div class="black" onmousedown="key('/sounds/44.wav', 44)" data-note="44"></div>
+          <div class="black" onmousedown="key('/sounds/46.wav', 46)" data-note="46"></div>
+          <div class="black" onmousedown="key('/sounds/48.wav', 48)" data-note="48"></div>
         </div>
         <div class="keys-2">
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/50.wav', 51)" data-note = "51"></div>
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/52.wav', 53)" data-note = "53"></div>
+          <div class="black" onmousedown="key('/sounds/51.wav', 51)" data-note="51"></div>
+          <div class="black" onmousedown="key('/sounds/53.wav', 53)" data-note="53"></div>
         </div>
         <div class="keys-3">
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/55.wav', 56)" data-note = "56"></div>
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/57.wav', 58)" data-note = "58"></div>
-          <div class="black" onmousedown="key('https://barrycap.com/sounds/harmonium/59.wav', 60)" data-note = "60"></div>
+          <div class="black" onmousedown="key('/sounds/56.wav', 56)" data-note="56"></div>
+          <div class="black" onmousedown="key('/sounds/58.wav', 58)" data-note="58"></div>
+          <div class="black" onmousedown="key('/sounds/60.wav', 60)" data-note="60"></div>
         </div>
       </div>
     </div>
@@ -111,6 +113,9 @@
       <canvas id="distribution-graph"></canvas>
     </div> -->
     <canvas id="distribution-graph"></canvas>
+    <div id="rolling-stats-history-graph-container">
+      <canvas id="rolling-stats-history-graph"></canvas>
+    </div>
   
   
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

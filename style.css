@@ -21,6 +21,15 @@ body {
   z-index: 0; 
 }
 
+#rolling-stats-history-graph-container {
+  position: absolute;
+  top: 0; /* Align to the top of the container */
+  right: 10px; /* Align to the right edge of the container */
+  width: 500px; /* Set the width of the container */
+  height: 500px; /* Set the height of the container */
+  z-index: 10;
+}
+
 :root {
   --bg: transparent;
   --primary: #78FFCD;
@@ -118,6 +127,17 @@ text-decoration: none;
   transform: translateY(-50%);
   line-height: 60px;
   color: #dddedf;
+}
+#playCompositionButton {
+  display: block; 
+  position: absolute;
+  top: 2%;
+  left: 5%;
+  right: 5%;
+  text-align: left;
+  transform: translateY(-50%);
+  color: #78FFCD;
+  z-index: 10;
 }
 
 #update-message {

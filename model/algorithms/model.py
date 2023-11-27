@@ -11,6 +11,7 @@ CORS(app)
 user_note_history = []
 successful_notes_sequence = []
 rolling_stats_history = []
+ROLLING_STATS_MAX_LEN = 10
 
 
 last_score = None
@@ -26,7 +27,7 @@ y = df['label']
 model = LogisticRegression()
 model.fit(X, y)
 
-ts = DirichletMultinomialThompsonSampling(num_arms=60)
+ts = DirichletMultinomialThompsonSampling(num_arms=61)
 
 def calculate_reward(initial_score, updated_score, max_change=1, weight_factor=1):
     # Calculate the change in score
@@ -41,8 +42,10 @@ def calculate_reward(initial_score, updated_score, max_change=1, weight_factor=1
     return weighted_reward
 
 # Function to calculate rolling statistics
-def calculate_rolling_statistics(notes, window_size=5):
+def calculate_rolling_statistics(notes, window_size=10):
     # Check if there are enough notes to calculate rolling statistics
+    if len(notes) == 0:
+        return 0,0,0,0
     if len(notes) >= window_size:
         windowed_notes = notes[-window_size:]
     else:
@@ -61,10 +64,6 @@ def calculate_rolling_statistics(notes, window_size=5):
     rolling_stats_history.append((rolling_avg_pitch, rolling_std_pitch, mean_interval, std_interval))
 
     return rolling_avg_pitch, rolling_std_pitch, mean_interval, std_interval
-
-@app.route('/get_rolling_statistics_history', methods=['GET'])
-def get_rolling_statistics_history():
-    return jsonify({'history': rolling_stats_history})
 
 @app.route('/user_history', methods=['GET'])
 def user_history():
@@ -106,6 +105,7 @@ def predict_and_update():
         if reward > 0:
             ts.update(current_note, reward)
             update_message = f"+{reward:.4f} reward to note {current_note}"
+            successful_notes_sequence.append(current_note)
         else:
             # Corrected condition for applying full negative reward
             if ts.alpha[current_note] - abs(reward) >= 1.0:
@@ -151,15 +151,20 @@ def get_rolling_statistics():
     # Calculate rolling statistics for the current note sequence
     rolling_stats = calculate_rolling_statistics(user_note_history)
 
-    # Convert the statistics to a dictionary for JSON serialization
+    # Add the current statistics to the history
     stats_dict = {
         'rolling_avg_pitch': rolling_stats[0],
         'rolling_std_pitch': rolling_stats[1],
         'mean_interval': rolling_stats[2],
         'std_interval': rolling_stats[3]
     }
+    rolling_stats_history.append(stats_dict)
+    if len(rolling_stats_history) > ROLLING_STATS_MAX_LEN:
+        del rolling_stats_history[0]
 
-    return jsonify(stats_dict)
+    # Return the entire history
+    return jsonify({'rolling_stats_history': rolling_stats_history})
+
 
 @app.route('/reset_distribution', methods=['POST'])
 def reset_distribution():
@@ -168,12 +173,12 @@ def reset_distribution():
 
 @app.route('/clear', methods=['POST'])
 def clear():
-    global user_note_history
-    user_note_history = []  # Reset the user note history
+    global user_note_history, successful_notes_sequence, rolling_stats_history
+    user_note_history.clear()  # Reset the user note history
     successful_notes_sequence.clear()
     ts.reset()
+    rolling_stats_history.clear()  # Clear the rolling stats history
     return jsonify({'status': 'cleared everything'})
-
 @app.route('/')
 def home():
     return "Welcome to the Bach Chorale Prediction App!"
