@@ -1,0 +1,16 @@
+{
+  "name": "tfjs_model",
+  "version": "1.0.0",
+  "description": "model file",
+  "main": "tf_model.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tensorflow/tfjs": "^4.13.0",
+    "@tensorflow/tfjs-node": "^4.13.0",
+    "csv-parser": "^3.0.0"
+  }
+}

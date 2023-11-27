@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@500&display=swap');
+
+body {
+  background: rgb(38, 38, 38);
+  margin: 0;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  font-family: 'cairo',serif;
+}
+
+
+#distribution-graph {
+  width: 100%;
+  height: 50%;
+  position: absolute;
+  bottom: 12;
+  left: 0;
+  right: 0;
+
+  z-index: 0; 
+}
+
+:root {
+  --bg: transparent;
+  --primary: #78FFCD;
+  --solid: #fff;
+  --btn-w: 13em;
+  --dot-w: calc(var(--btn-w)*.2);
+  --tr-X: calc(var(--btn-w) - var(--dot-w));
+}
+
+#suggest-note-container .btn {
+  top: -190px;
+  position: relative;
+	margin: 0 auto;
+	width: var(--btn-w);
+	color: var(--primary);
+	border: .15em solid var(--primary);
+	text-transform: uppercase;
+	text-align: center;
+	line-height: 2em;
+	cursor: pointer;	
+  z-index: 3
+}
+#suggest-note-container .dot {
+	content: '';
+	position: absolute;
+	top: 0;
+	width: var(--dot-w);
+	height: 100%;
+	border-radius: 0%;
+	transition: all 300ms ease;
+	display: none;
+}
+
+#suggest-note-container .dot:after {
+	content: '';
+	position: absolute;
+	left: calc(50% - .4em);
+	top: -.4em;
+	height: .8em;
+	width: .8em;
+  border-radius: 1em;
+	background: var(--primary);
+	border: .25em solid var(--solid);
+	box-shadow: 0 0 .7em var(--solid),
+				0 0 2em var(--primary);
+}
+#suggest-note-container .btn:hover .dot,
+#suggest-note-container .btn:focus .dot {
+	animation: atom 2s infinite linear;
+	display: block;
+}
+
+#suggest-note-container .container {
+  top: 0;
+  position: relative;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-flow: wrap;
+	background: var(--bg);
+	font-size: 20px;
+	font-family:'cairo',serif;
+
+}
+
+@keyframes atom {
+	0% {transform: translateX(0) rotate(0);}
+	30%{transform: translateX(var(--tr-X)) rotate(0);}
+	50% {transform: translateX(var(--tr-X)) rotate(180deg);}
+	80% {transform: translateX(0) rotate(180deg);}
+	100% {transform: translateX(0) rotate(360deg);}
+}
+.rounded {
+font-size:18px;  
+font-family:'cairo',serif;	
+}
+.rounded a {
+color: #78FFCD;
+text-decoration: none;
+}
+
+
+.highlight {
+  background-color: #78ffcebc !important; /* Or any highlight color */
+  /* Other styles for highlight effect */
+}
+.sl {
+  display: block; 
+  position: absolute;
+  top: 35%;
+  left: 15%;
+  right: 15%;
+  text-align: center;
+  transform: translateY(-50%);
+  line-height: 60px;
+  color: #dddedf;
+}
+
+#update-message {
+  display: block; 
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  right: 5%;
+  text-align: left;
+  transform: translateY(-50%);
+  line-height: 60px;
+  color: #dddedf;
+
+}
+
+div {
+  transition: .1s ease-out;
+}
+.harmonium {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+}
+  .white-keys {
+    display: flex;
+    z-index: 1;
+  }
+    .white {
+      background-color: #cde4db;
+      border-radius: 0 0 .3vw .3vw;
+      box-shadow: 0 .5vw .5vw -.1vw #0004, inset 0 0 0 .1vw #d2ffee, inset 0 -.7vw 0 0 #666;
+      width: 2.5vw;
+      height: 15vw;
+    }
+      .white:active {
+        background-color: #dddddd;
+        box-shadow: 0 .4vw 1vw -.2vw #0004, inset 0 0 0 .1vw #bbb, inset 0 -.2vw 0 0 #bbb;
+      }
+  .black-keys {
+    width: 86vw;
+    position: absolute;
+    left: 1.3vw;
+    display: flex;
+    gap: 2.5vw;
+  }
+    .keys-2 {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.7vw;
+    }
+    .keys-3 {
+      box-shadow: 0 0 1vw 0.5vw #0002;
+      display: flex;
+      justify-content: space-between;
+      gap: 1.4vw;
+    }
+    .black {
+      background-color: rgb(38, 38, 38);
+      border-radius: 0 0 .3vw .3vw;
+      box-shadow: 0.2vw 0 0.5vw 0 #0004, inset 0 -.2vw 0 0.2vw rgb(66, 66, 66), inset 0 -0.7vw 0 0 #666;
+      width: 1.6vw;
+      height: 10vw;
+      z-index: 2;
+    }
+      .black:active {
+        background-color: #000;
+        box-shadow: 0.2vw 0 0.2vw 0 #0004, inset 0 -.2vw 0 0.2vw #444, inset 0 -0.4vw 0 0 #555;
+      }
+
