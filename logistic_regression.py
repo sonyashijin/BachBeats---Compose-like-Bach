@@ -1,8 +1,5 @@
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import OneHotEncoder
-import joblib
 
 class LogisticRegression:
     def __init__(self, learning_rate=0.01, max_iter=1000):

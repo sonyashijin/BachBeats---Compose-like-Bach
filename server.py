@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import joblib
 from sklearn.model_selection import train_test_split
+from flask import render_template
 
 from thompson_sampling import DirichletMultinomialThompsonSampling
 from logistic_regression import LogisticRegression
@@ -95,6 +96,7 @@ def predict_and_update():
 
     data = request.json
     current_note = data['current_note']
+    update_message = "Keep going to update distribution!"
 
     # Logic for the first note
     if not user_note_history:
@@ -147,11 +149,27 @@ def predict_and_update():
 
 @app.route('/get_success_sequence', methods=['GET'])
 def get_success_sequence():
+    # global successful_notes_sequence
+    # if len(successful_notes_sequence) > 6:
+    #     successful_notes_sequence = successful_notes_sequence[-6:]
+    # sequence = [[int(note) for note in seq] for seq in successful_notes_sequence]
     global successful_notes_sequence
+
+    # Restrict the length of the successful_notes_sequence to the last 6 combinations
     if len(successful_notes_sequence) > 6:
         successful_notes_sequence = successful_notes_sequence[-6:]
-    sequence = [[int(note) for note in seq] for seq in successful_notes_sequence]
-    return jsonify({'success_sequence': sequence})
+
+    # Start with the full first combination
+    sequence = successful_notes_sequence[0] if successful_notes_sequence else []
+
+    # For each subsequent combination, append only the last note
+    for combo in successful_notes_sequence[1:]:
+        if len(combo) == 3:
+            sequence.append(combo[2])
+
+    # Convert elements to int for JSON serialization
+    ser_sequence = [int(note) for note in sequence]
+    return jsonify({'success_sequence': ser_sequence})
 
 @app.route('/reset_sequence', methods=['POST'])
 def reset_sequence():
@@ -200,7 +218,8 @@ def clear():
     return jsonify({'status': 'cleared everything'})
 @app.route('/')
 def home():
-    return "Welcome to the Bach Chorale Prediction App!"
+    return render_template('index.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
