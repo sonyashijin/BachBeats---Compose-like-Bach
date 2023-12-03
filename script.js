@@ -196,7 +196,9 @@ function playNotesSequence() {
   .then(response => response.json())
   .then(data => {
       console.log(data)
-      const successfulNotesSequence = data.success_sequence;
+      const unflattenedSequence = data.success_sequence
+      const successfulNotesSequence = unflattenedSequence.flat();
+      
       if (successfulNotesSequence.length > 0) {
           playSequence(successfulNotesSequence, 0);
       } else {
@@ -219,11 +221,37 @@ function playSequence(notes, index) {
   }
 }
 
+// function updatePlayButtonVisibility() {
+//   fetch('http://127.0.0.1:5000/get_success_sequence')
+//   .then(response => response.json())
+//   .then(data => {
+//       const successfulNotesSequence = data.success_sequence;
+//       const playButton = document.getElementById('playCompositionButton');
+      
+//       if (successfulNotesSequence && successfulNotesSequence.length > 0) {
+//           playButton.style.display = 'block'; // Show the button
+//       } else {
+//           playButton.style.display = 'none'; // Hide the button
+//       }
+//   })
+//   .catch(error => {
+//       console.error('Error:', error);
+//       // Optionally handle the error case (e.g., hide the button)
+//       document.getElementById('playCompositionButton').style.display = 'none';
+//   });
+// }
 
 function updatePlayButtonVisibility() {
   fetch('http://127.0.0.1:5000/get_success_sequence')
-  .then(response => response.json())
+  .then(response => {
+      console.log('Response received', response);
+      if (!response.ok) {
+          throw new Error('Network response was not ok ' + response.statusText);
+      }
+      return response.json();
+  })
   .then(data => {
+      console.log('Data:', data);
       const successfulNotesSequence = data.success_sequence;
       const playButton = document.getElementById('playCompositionButton');
       

@@ -2,6 +2,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import pandas as pd
 import numpy as np
+import joblib
+from sklearn.model_selection import train_test_split
+
 from thompson_sampling import DirichletMultinomialThompsonSampling
 from logistic_regression import LogisticRegression
 
@@ -12,22 +15,31 @@ user_note_history = []
 successful_notes_sequence = []
 rolling_stats_history = []
 ROLLING_STATS_MAX_LEN = 10
-
-
+model = None
 last_score = None
 
-# Load your data
-df = pd.read_csv('/Users/sonyashijin/three-js-games/piano_mesh/src/model/data/extracted_data/output.csv')
 
-# Split the data into features and target
-X = df[['pitch', 'interval', 'rolling_avg_pitch', 'rolling_std_pitch', 'rolling_avg_interval', 'rolling_std_interval']]
-y = df['label']
-
-# Train your model
-model = LogisticRegression()
-model.fit(X, y)
+#model = joblib.load('logistic_regression_model.pkl')
 
 ts = DirichletMultinomialThompsonSampling(num_arms=61)
+
+def load_and_train_model():
+    global model
+    combined_df = pd.read_csv('combined_dataset.csv')
+
+
+    X = combined_df.drop('label', axis=1)
+    y = combined_df['label']
+
+    # Split the data
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Train the model
+    model = LogisticRegression(learning_rate=0.001, max_iter=1000)
+    model.fit(X_train, y_train)
+
+# Call the function to load data and train the model at startup
+load_and_train_model()
 
 def calculate_reward(initial_score, updated_score, max_change=1, weight_factor=1):
     # Calculate the change in score
@@ -77,26 +89,29 @@ def view_distribution():
 
 @app.route('/predict', methods=['POST'])
 def predict_and_update():
+    global user_note_history
+    global model
     global last_score
-    update_message = "Keep going to update distribution!"
+
     data = request.json
     current_note = data['current_note']
-    user_note_history.append(current_note)
-    previous_notes = user_note_history[:-1]
-    
-    # calculate rolling stats
-    rolling_stats = calculate_rolling_statistics(user_note_history)
-    rolling_stats_list = list(rolling_stats)
-    
-    # get features
-    if previous_notes:
-        interval = current_note - previous_notes[-1]
+
+    # Logic for the first note
+    if not user_note_history:
+        # if first note, have the first three notes just be the middle of piano
+        user_note_history.extend([30, 30, 30])
     else:
-        interval = 0
+        user_note_history.append(current_note)
 
-    input_features = [current_note, interval] + rolling_stats_list
+    last_three_notes = np.array(user_note_history[-3:])
 
-    prediction = model.predict_proba([input_features])[0]
+    # calculate average interval between the last three notes
+    intervals = np.diff(last_three_notes)
+    avg_interval = np.mean(intervals) if len(intervals) > 0 else 0
+
+    # combine last three notes and avg_interval for input_features
+    input_features = np.append(last_three_notes, avg_interval).reshape(1, -1)
+    prediction = model.predict_proba(input_features)[0]
 
     # update the distribution
     if last_score is not None:
@@ -105,7 +120,8 @@ def predict_and_update():
         if reward > 0:
             ts.update(current_note, reward)
             update_message = f"+{reward:.4f} reward to note {current_note}"
-            successful_notes_sequence.append(current_note)
+            successful_notes_sequence.append(list(last_three_notes))
+            print(successful_notes_sequence)
         else:
             # Corrected condition for applying full negative reward
             if ts.alpha[current_note] - abs(reward) >= 1.0:
@@ -119,8 +135,7 @@ def predict_and_update():
                     ts.update(current_note, -max_neg_reward)
                     update_message = f"-{max_neg_reward:.4f} max decrement to note {current_note} (to keep alpha above 1)"
                 else:
-                    update_message = f"Distribution unchanged to keep alpha > 1. Attempted decrement: {reward:.4f}."
-
+                    update_message = f"Distribution unchanged to keep alpha > 1. Attempted decrement to note {current_note}: {reward:.4f}."
 
         # Debug prints
         print(f"Alpha after update: {ts.alpha[current_note]}, Update Message: {update_message}")
@@ -132,7 +147,11 @@ def predict_and_update():
 
 @app.route('/get_success_sequence', methods=['GET'])
 def get_success_sequence():
-    return jsonify({'success_sequence': successful_notes_sequence})
+    global successful_notes_sequence
+    if len(successful_notes_sequence) > 6:
+        successful_notes_sequence = successful_notes_sequence[-6:]
+    sequence = [[int(note) for note in seq] for seq in successful_notes_sequence]
+    return jsonify({'success_sequence': sequence})
 
 @app.route('/reset_sequence', methods=['POST'])
 def reset_sequence():
