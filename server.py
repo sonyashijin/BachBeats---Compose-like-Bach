@@ -39,7 +39,7 @@ def load_and_train_model():
 # Call the function to load data and train the model at startup
 load_and_train_model()
 
-def calculate_reward(initial_score, updated_score, max_change=1, weight_factor=1):
+def calculate_reward(initial_score, updated_score, max_change=1, weight_factor=10):
     # Calculate the change in score
     score_change = updated_score - initial_score
 
@@ -148,14 +148,12 @@ def predict_and_update():
 def get_success_sequence():
     global successful_notes_sequence
 
-    # Restrict the length of the successful_notes_sequence to the last 6 combinations
-    if len(successful_notes_sequence) > 6:
-        successful_notes_sequence = successful_notes_sequence[-6:]
+    # Restrict the length of the successful_notes_sequence to the last 10 combinations
+    if len(successful_notes_sequence) > 10:
+        successful_notes_sequence = successful_notes_sequence[-10:]
 
-    # Initialize an empty sequence
     sequence = []
 
-    # For each combination, append all notes except the first one
     for combo in successful_notes_sequence:
         print(combo)
         sequence.extend(combo[:1])  
