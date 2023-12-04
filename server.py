@@ -36,17 +36,17 @@ def load_and_train_model():
     model = LogisticRegression(learning_rate=0.001, max_iter=1000)
     model.fit(X, y)
 
-# Call the function to load data and train the model at startup
+# load and train data at start up
 load_and_train_model()
 
 def calculate_reward(initial_score, updated_score, max_change=1, weight_factor=10):
-    # Calculate the change in score
+    # calculate the difference in score
     score_change = updated_score - initial_score
 
-    # Normalize the change
+    # normalize the change
     normalized_change = score_change / max_change
 
-    # Apply the weighting factor
+    # apply the weighting factor
     weighted_reward = normalized_change * weight_factor
 
     return weighted_reward
