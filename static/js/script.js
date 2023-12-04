@@ -4,7 +4,7 @@ let rollingStatsHistoryChart;
 function key(url, noteInt) {
   new Audio(url).play();
 
-  fetch('http://127.0.0.1:5000/predict', {
+  fetch('/predict', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ function key(url, noteInt) {
 
 function suggestNote() {
   // Make a fetch request to get the suggested note
-  fetch('http://127.0.0.1:5000/suggest_note')
+  fetch('/suggest_note')
   .then(response => response.json())
   .then(data => {
       // Get the suggested note
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function updateDistributionGraph() {
-  fetch('http://127.0.0.1:5000/view_distribution')
+  fetch('/view_distribution')
   .then(response => response.json())
   .then(data => {
       // Update the graph data
@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function updateRollingStatsHistoryGraph() {
-  fetch('http://127.0.0.1:5000/get_rolling_statistics')
+  fetch('/get_rolling_statistics')
   .then(response => {
     console.log('got response');
     console.log(response)
@@ -192,7 +192,7 @@ function updateRollingStatsHistoryGraph() {
 }
 
 function playNotesSequence() {
-  fetch('http://127.0.0.1:5000/get_success_sequence')
+  fetch('/get_success_sequence')
   .then(response => response.json())
   .then(data => {
       console.log(data)
@@ -213,7 +213,7 @@ function playNotesSequence() {
 function playSequence(notes, index) {
   if (index < notes.length) {
       let note = notes[index];
-      let audio = new Audio(`static/sounds/${note}.wav`);
+      let audio = new Audio(`/static/sounds/${note}.wav`);
       audio.play();
       audio.onended = function() {
           playSequence(notes, index + 1);
@@ -242,7 +242,7 @@ function playSequence(notes, index) {
 // }
 
 function updatePlayButtonVisibility() {
-  fetch('http://127.0.0.1:5000/get_success_sequence')
+  fetch('/get_success_sequence')
   .then(response => {
       console.log('Response received', response);
       if (!response.ok) {
@@ -269,7 +269,7 @@ function updatePlayButtonVisibility() {
 }
 
 function resetApplication() {
-  fetch('http://127.0.0.1:5000/clear', {
+  fetch('/clear', {
       method: 'POST'
   })
   .then(response => response.json())
