@@ -149,23 +149,18 @@ def predict_and_update():
 
 @app.route('/get_success_sequence', methods=['GET'])
 def get_success_sequence():
-    # global successful_notes_sequence
-    # if len(successful_notes_sequence) > 6:
-    #     successful_notes_sequence = successful_notes_sequence[-6:]
-    # sequence = [[int(note) for note in seq] for seq in successful_notes_sequence]
     global successful_notes_sequence
 
     # Restrict the length of the successful_notes_sequence to the last 6 combinations
-    if len(successful_notes_sequence) > 3:
-        successful_notes_sequence = successful_notes_sequence[-3:]
+    if len(successful_notes_sequence) > 6:
+        successful_notes_sequence = successful_notes_sequence[-6:]
 
-    # Start with the full first combination
-    sequence = successful_notes_sequence[0] if successful_notes_sequence else []
+    # Initialize an empty sequence
+    sequence = []
 
-    # For each subsequent combination, append only the last note
-    for combo in successful_notes_sequence[1:]:
-        if len(combo) == 3:
-            sequence.append(combo[2])
+    # For each combination, append all notes except the first one
+    for combo in successful_notes_sequence:
+        sequence.extend(combo[1:])  # Skip the first note and add the rest
 
     # Convert elements to int for JSON serialization
     ser_sequence = [int(note) for note in sequence]
