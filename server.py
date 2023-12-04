@@ -157,7 +157,9 @@ def get_success_sequence():
 
     # For each combination, append all notes except the first one
     for combo in successful_notes_sequence:
-        sequence.extend(combo[1:])  # Skip the first note and add the rest
+        print(combo)
+        sequence.extend(combo[:1])  
+        print(sequence)
 
     # Convert elements to int for JSON serialization
     ser_sequence = [int(note) for note in sequence]
