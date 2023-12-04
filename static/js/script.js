@@ -213,7 +213,7 @@ function playNotesSequence() {
 function playSequence(notes, index) {
   if (index < notes.length) {
       let note = notes[index];
-      let audio = new Audio(`sounds/${note}.wav`);
+      let audio = new Audio(`static/sounds/${note}.wav`);
       audio.play();
       audio.onended = function() {
           playSequence(notes, index + 1);

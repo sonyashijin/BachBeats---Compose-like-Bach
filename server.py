@@ -156,8 +156,8 @@ def get_success_sequence():
     global successful_notes_sequence
 
     # Restrict the length of the successful_notes_sequence to the last 6 combinations
-    if len(successful_notes_sequence) > 6:
-        successful_notes_sequence = successful_notes_sequence[-6:]
+    if len(successful_notes_sequence) > 3:
+        successful_notes_sequence = successful_notes_sequence[-3:]
 
     # Start with the full first combination
     sequence = successful_notes_sequence[0] if successful_notes_sequence else []
