@@ -1,4 +1,5 @@
 import numpy as np
+import logging
 
 class DirichletMultinomialThompsonSampling:
     def __init__(self, num_arms):
@@ -13,6 +14,7 @@ class DirichletMultinomialThompsonSampling:
 
     def update(self, chosen_arm, reward):
         # Update alpha parameter of the chosen arm
+        logging.debug(f"Updated alpha for arm {chosen_arm}: {self.alpha[chosen_arm]}")
         self.alpha[chosen_arm] += reward
     def reset(self):
     # Reset alpha to uniform prior
