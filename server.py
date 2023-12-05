@@ -119,7 +119,7 @@ def predict_and_update():
         if reward > 0:
             ts.update(current_note, reward)
             update_message = f"+{reward:.4f} reward to note {current_note}"
-            successful_notes_sequence.append(list(last_three_notes))
+            successful_notes_sequence.append(current_note)
             print(successful_notes_sequence)
         else:
             # Corrected condition for applying full negative reward
@@ -154,9 +154,9 @@ def get_success_sequence():
 
     sequence = []
 
-    for combo in successful_notes_sequence:
-        print(combo)
-        sequence.extend(combo[:1])  
+    for note in successful_notes_sequence:
+        print(note)
+        sequence.extend(note)  
         print(sequence)
 
     # Convert elements to int for JSON serialization
