@@ -142,6 +142,7 @@ def predict_and_update():
                     ts.update(current_note, -max_neg_reward)
                     update_message = f"-{max_neg_reward:.4f} max decrement to note {current_note} (to keep alpha above 1)"
                 else:
+                    ts.update(current_note, 0)
                     update_message = f"Distribution unchanged to keep alpha > 1. Attempted decrement to note {current_note}: {reward:.4f}."
         logging.debug(f"Updated alpha values: {ts.alpha}")
         # Debug prints
