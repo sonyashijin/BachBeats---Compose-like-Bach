@@ -183,6 +183,7 @@ def suggest_note():
 
 @app.route('/get_rolling_statistics', methods=['GET'])
 def get_rolling_statistics():
+    global rolling_stats_history
     # Calculate rolling statistics for the current note sequence
     rolling_stats = calculate_rolling_statistics(user_note_history)
 

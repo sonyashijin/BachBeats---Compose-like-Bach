@@ -163,7 +163,6 @@ function updateRollingStatsHistoryGraph() {
   )
   .then(data => {
       // console.log('hi', rollingStatsHistoryChart[0].data)
-      console.log('hi')
 
       const history = data.rolling_stats_history;
 
@@ -294,5 +293,5 @@ function resetApplication() {
 }
 
 
-document.addEventListener('DOMContentLoaded', resetApplication);
+//document.addEventListener('DOMContentLoaded', resetApplication);
 
