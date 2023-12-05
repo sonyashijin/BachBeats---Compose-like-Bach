@@ -156,7 +156,7 @@ def get_success_sequence():
 
     for note in successful_notes_sequence:
         print(note)
-        sequence.extend(note)  
+        sequence.append(note)  
         print(sequence)
 
     # Convert elements to int for JSON serialization
