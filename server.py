@@ -90,6 +90,7 @@ def predict_and_update():
     global user_note_history
     global model
     global last_score
+    global ts
 
     data = request.json
     current_note = data['current_note']
