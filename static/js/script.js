@@ -87,7 +87,7 @@ function updateDistributionGraph() {
   .then(response => response.json())
   .then(data => {
       console.log('current');
-      console.long('data')
+      console.log('data')
       // Update the graph data
       sampling_chart.data.datasets[0].data = data.distribution;
       sampling_chart.update();
