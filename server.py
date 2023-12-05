@@ -123,27 +123,30 @@ def predict_and_update():
     if last_score is not None:
         reward = calculate_reward(last_score, prediction)
         logging.debug(f"alpha values before update: {ts.alpha}")
+        new_alpha = ts.alpha[current_note] + reward
+        ts.alpha[current_note] = max(new_alpha, 1)
+        logging.debug(f"Updated alpha for arm {current_note}: {ts.alpha[current_note]}")
         if reward > 0:
-            ts.update(current_note, reward)
+            #ts.update(current_note, reward)
             update_message = f"+{reward:.4f} reward to note {current_note}"
             successful_notes_sequence.append(current_note)
             logging.debug(f"successful_notes_sequence appended with {current_note}")
             print(successful_notes_sequence)
-        else:
+        # else:
             # Corrected condition for applying full negative reward
-            if ts.alpha[current_note] - abs(reward) >= 1.0:
-                ts.update(current_note, reward)
-                update_message = f"{reward:.4f} reward to note {current_note}"
-            else:
-                # Calculate the maximum decrement that keeps alpha above 1
-                max_neg_reward = 1 - ts.alpha[current_note]
-                # Apply the maximum decrement if it's greater than zero
-                if max_neg_reward > 0:
-                    ts.update(current_note, -max_neg_reward)
-                    update_message = f"-{max_neg_reward:.4f} max decrement to note {current_note} (to keep alpha above 1)"
-                else:
-                    ts.update(current_note, 0)
-                    update_message = f"Distribution unchanged to keep alpha > 1. Attempted decrement to note {current_note}: {reward:.4f}."
+            # if ts.alpha[current_note] - abs(reward) >= 1.0:
+            #     ts.update(current_note, reward)
+            #     update_message = f"{reward:.4f} reward to note {current_note}"
+            # else:
+            #     # Calculate the maximum decrement that keeps alpha above 1
+            #     max_neg_reward = 1 - ts.alpha[current_note]
+            #     # Apply the maximum decrement if it's greater than zero
+            #     if max_neg_reward > 0:
+            #         ts.update(current_note, -max_neg_reward)
+            #         update_message = f"-{max_neg_reward:.4f} max decrement to note {current_note} (to keep alpha above 1)"
+            #     else:
+            #         ts.update(current_note, 0)
+            #         update_message = f"Distribution unchanged to keep alpha > 1. Attempted decrement to note {current_note}: {reward:.4f}."
         logging.debug(f"Updated alpha values: {ts.alpha}")
         # Debug prints
         print(f"Alpha after update: {ts.alpha[current_note]}, Update Message: {update_message}")
