@@ -6,6 +6,7 @@ class DirichletMultinomialThompsonSampling:
         # Initialize parameters for Dirichlet distribution
         self.num_arms = num_arms
         self.alpha = np.ones(num_arms)  # Uniform prior
+        logging.debug(f"constructor called")
 
     def select_arm(self):
         # Draw sample from Dirichlet distribution
