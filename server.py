@@ -87,7 +87,7 @@ def view_distribution():
     global ts
     # Convert numpy array to list for JSON serialization
     distribution = ts.alpha.tolist()
-    print(distribution)
+    logging.debug(f"/view_distribution called. current distribution: {distribution}")
     return jsonify({'distribution': distribution})
 
 @app.route('/predict', methods=['POST'])
