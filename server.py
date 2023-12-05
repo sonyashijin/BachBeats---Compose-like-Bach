@@ -4,9 +4,12 @@ import pandas as pd
 import numpy as np
 import joblib
 from flask import render_template
+import logging
 
 from thompson_sampling import DirichletMultinomialThompsonSampling
 from logistic_regression import LogisticRegression
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 app = Flask(__name__)
 CORS(app)
@@ -81,6 +84,7 @@ def user_history():
 
 @app.route('/view_distribution', methods=['GET'])
 def view_distribution():
+    global ts
     # Convert numpy array to list for JSON serialization
     distribution = ts.alpha.tolist()
     return jsonify({'distribution': distribution})
@@ -93,6 +97,7 @@ def predict_and_update():
     global ts
 
     data = request.json
+    logging.debug(f"Received data: {data}")
     current_note = data['current_note']
     update_message = "Keep going to update distribution!"
 
@@ -136,7 +141,7 @@ def predict_and_update():
                     update_message = f"-{max_neg_reward:.4f} max decrement to note {current_note} (to keep alpha above 1)"
                 else:
                     update_message = f"Distribution unchanged to keep alpha > 1. Attempted decrement to note {current_note}: {reward:.4f}."
-
+        logging.debug(f"Updated alpha values: {ts.alpha}")
         # Debug prints
         print(f"Alpha after update: {ts.alpha[current_note]}, Update Message: {update_message}")
 
