@@ -87,6 +87,7 @@ def view_distribution():
     global ts
     # Convert numpy array to list for JSON serialization
     distribution = ts.alpha.tolist()
+    print(distribution)
     return jsonify({'distribution': distribution})
 
 @app.route('/predict', methods=['POST'])
@@ -121,11 +122,12 @@ def predict_and_update():
     # update the distribution
     if last_score is not None:
         reward = calculate_reward(last_score, prediction)
-
+        logging.debug(f"alpha values before update: {ts.alpha}")
         if reward > 0:
             ts.update(current_note, reward)
             update_message = f"+{reward:.4f} reward to note {current_note}"
             successful_notes_sequence.append(current_note)
+            logging.debug(f"successful_notes_sequence appended with {current_note}")
             print(successful_notes_sequence)
         else:
             # Corrected condition for applying full negative reward

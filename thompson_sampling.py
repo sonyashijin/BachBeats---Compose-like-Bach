@@ -18,4 +18,5 @@ class DirichletMultinomialThompsonSampling:
         self.alpha[chosen_arm] += reward
     def reset(self):
     # Reset alpha to uniform prior
+        logging.debug("Resetting alpha values to uniform prior.")v
         self.alpha = np.ones(self.num_arms)

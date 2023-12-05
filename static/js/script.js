@@ -86,9 +86,12 @@ function updateDistributionGraph() {
   fetch('/view_distribution')
   .then(response => response.json())
   .then(data => {
+      console.log('current');
+      console.long('data')
       // Update the graph data
       sampling_chart.data.datasets[0].data = data.distribution;
       sampling_chart.update();
+      console.log('updated');
       console.log(data);
   })
   .catch(error => {
@@ -156,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function updateRollingStatsHistoryGraph() {
   fetch('/get_rolling_statistics')
   .then(response => {
-    console.log('got response');
+    console.log('got rolling stats response');
     console.log(response)
     return response.json();
   }
@@ -243,14 +246,14 @@ function playSequence(notes, index) {
 function updatePlayButtonVisibility() {
   fetch('/get_success_sequence')
   .then(response => {
-      console.log('Response received', response);
+      console.log('play button response received', response);
       if (!response.ok) {
           throw new Error('Network response was not ok ' + response.statusText);
       }
       return response.json();
   })
   .then(data => {
-      console.log('Data:', data);
+      console.log('success sequence:', data);
       const successfulNotesSequence = data.success_sequence;
       const playButton = document.getElementById('playCompositionButton');
       
