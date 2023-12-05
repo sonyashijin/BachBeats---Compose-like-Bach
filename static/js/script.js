@@ -14,7 +14,7 @@ function key(url, noteInt) {
   .then(response => response.json())
   .then(data => {
     // Update the Bach likeness score
-    console.log(data)
+    //console.log(data)
     document.getElementById('scoreValue').textContent = data.bach_likeness_score.toFixed(2);
     // Display the update message
     if(data.update_message) {
@@ -42,7 +42,7 @@ function suggestNote() {
       // Get the suggested note
       const suggestedNote = data.suggested_note;
       highlightKey(suggestedNote);
-      console.log(data)
+      //console.log(data)
   })
   .catch(error => {
       console.error('Error:', error);
@@ -51,7 +51,7 @@ function suggestNote() {
 
 function highlightKey(note) {
   let keyElement = document.querySelector(`[data-note="${note.toString()}"]`);
-  console.log(keyElement)
+  //console.log(keyElement)
   if (keyElement) {
       keyElement.classList.add('highlight');
       setTimeout(() => {
@@ -86,6 +86,7 @@ function updateDistributionGraph() {
   fetch('/view_distribution')
   .then(response => response.json())
   .then(data => {
+      print(data)
       // Update the graph data
       sampling_chart.data.datasets[0].data = data.distribution;
       sampling_chart.update();
@@ -163,8 +164,6 @@ function updateRollingStatsHistoryGraph() {
   )
   .then(data => {
       // console.log('hi', rollingStatsHistoryChart[0].data)
-      console.log('hi')
-
       const history = data.rolling_stats_history;
 
       // Check if history is an array
@@ -244,14 +243,14 @@ function playSequence(notes, index) {
 function updatePlayButtonVisibility() {
   fetch('/get_success_sequence')
   .then(response => {
-      console.log('Response received', response);
+      //console.log('Response received', response);
       if (!response.ok) {
           throw new Error('Network response was not ok ' + response.statusText);
       }
       return response.json();
   })
   .then(data => {
-      console.log('Data:', data);
+      //console.log('Data:', data);
       const successfulNotesSequence = data.success_sequence;
       const playButton = document.getElementById('playCompositionButton');
       
