@@ -245,6 +245,7 @@ def clear():
     ts.reset()
     rolling_stats_history.clear()  # Clear the rolling stats history
     redis_client.delete('thompson_sampling')
+    logging.DEBUG("TS object deleted from database")
     return jsonify({'status': 'cleared everything'})
 
 @app.route('/')

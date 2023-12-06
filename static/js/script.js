@@ -4,6 +4,8 @@ let rollingStatsHistoryChart;
 function key(url, noteInt) {
   new Audio(url).play();
 
+  console.log(noteInt, "pressed");
+
   fetch('/predict', {
     method: 'POST',
     headers: {
@@ -265,12 +267,12 @@ function updatePlayButtonVisibility() {
   })
   .catch(error => {
       console.error('Error:', error);
-      // Optionally handle the error case (e.g., hide the button)
       document.getElementById('playCompositionButton').style.display = 'none';
   });
 }
 
 function resetApplication() {
+  console.log("resetApplication starting");
   fetch('/clear', {
       method: 'POST'
   })
@@ -295,6 +297,9 @@ function resetApplication() {
   .catch(error => console.error('Error:', error));
 }
 
-
-//document.addEventListener('DOMContentLoaded', resetApplication);
+console.log("Adding event listener");
+document.addEventListener('DOMContentLoaded', () => {
+  console.log("Event listener fired");
+  resetApplication();
+});
 
