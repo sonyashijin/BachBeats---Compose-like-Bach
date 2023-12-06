@@ -17,15 +17,16 @@ function key(url, noteInt) {
   .then(data => {
     // Update the Bach likeness score
     console.log(data)
+    if (sampling_chart) {
+      updateDistributionGraph();
+    }
     document.getElementById('scoreValue').textContent = data.bach_likeness_score.toFixed(2);
     // Display the update message
     if(data.update_message) {
        document.getElementById('update-message').textContent = data.update_message;
     }
     // Update the distribution graph
-    if (sampling_chart) {
-      updateDistributionGraph();
-    }
+
     if (rollingStatsHistoryChart) {
       updateRollingStatsHistoryGraph();
     }
@@ -88,12 +89,12 @@ function updateDistributionGraph() {
   fetch('/view_distribution')
   .then(response => response.json())
   .then(data => {
-      console.log('current');
-      console.log('data')
+      console.log('current distribution before graph update');
+      console.log(data)
       // Update the graph data
       sampling_chart.data.datasets[0].data = data.distribution;
       sampling_chart.update();
-      console.log('updated');
+      console.log('updated distribution after graph update');
       console.log(data);
   })
   .catch(error => {
