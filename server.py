@@ -105,8 +105,9 @@ def user_history():
 
 @app.route('/view_distribution', methods=['GET'])
 def view_distribution():
-    #global ts
-    # Convert numpy array to list for JSON serialization
+    ts_from_redis = get_ts_from_redis()
+    if ts_from_redis:
+        ts = ts_from_redis
     distribution = ts.alpha.tolist()
     logging.debug(f"/view_distribution called. current distribution: {distribution}")
     return jsonify({'distribution': distribution})
