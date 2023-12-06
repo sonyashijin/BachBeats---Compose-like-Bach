@@ -5,10 +5,14 @@ import numpy as np
 import joblib
 from flask import render_template
 import logging
-
+import os
 from thompson_sampling import DirichletMultinomialThompsonSampling
 from logistic_regression import LogisticRegression
+import redis
+import pickle
 
+redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379')
+redis_client = redis.Redis.from_url(redis_url)
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 app = Flask(__name__)
@@ -25,6 +29,23 @@ last_score = None
 #model = joblib.load('logistic_regression_model.pkl')
 
 ts = DirichletMultinomialThompsonSampling(num_arms=61)
+
+def serialize_ts(ts_object):
+    return pickle.dumps(ts_object)
+
+def save_ts_to_redis(ts_object):
+    redis_client.set('thompson_sampling', serialize_ts(ts_object))
+
+# Deserialize the object
+def deserialize_ts(serialized_ts):
+    return pickle.loads(serialized_ts)
+
+# Retrieve the serialized object from Redis
+def get_ts_from_redis():
+    serialized_ts = redis_client.get('thompson_sampling')
+    if serialized_ts:
+        return deserialize_ts(serialized_ts)
+    return None  # Handle the case where ts is not yet stored
 
 def load_and_train_model():
     global model
@@ -84,7 +105,7 @@ def user_history():
 
 @app.route('/view_distribution', methods=['GET'])
 def view_distribution():
-    global ts
+    #global ts
     # Convert numpy array to list for JSON serialization
     distribution = ts.alpha.tolist()
     logging.debug(f"/view_distribution called. current distribution: {distribution}")
@@ -95,7 +116,7 @@ def predict_and_update():
     global user_note_history
     global model
     global last_score
-    global ts
+    #global ts
 
     data = request.json
     logging.debug(f"Received data: {data}")
@@ -153,7 +174,7 @@ def predict_and_update():
 
     # update last score
     last_score = prediction
-
+    save_ts_to_redis(ts)
     return jsonify({'bach_likeness_score': prediction, 'update_message': update_message})
 
 @app.route('/get_success_sequence', methods=['GET'])
