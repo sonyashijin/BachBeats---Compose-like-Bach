@@ -109,7 +109,7 @@ def view_distribution():
     if ts_from_redis:
         ts = ts_from_redis
     distribution = ts.alpha.tolist()
-    logging.debug(f"/view_distribution called. current distribution: {distribution}")
+    #logging.debug(f"/view_distribution called. current distribution: {distribution}")
     return jsonify({'distribution': distribution})
 
 @app.route('/predict', methods=['POST'])
@@ -121,7 +121,7 @@ def predict_and_update():
         ts = ts_from_redis
 
     data = request.json
-    logging.debug(f"Received data: {data}")
+    #logging.debug(f"Received data: {data}")
     current_note = data['current_note']
     update_message = "Keep going to update distribution!"
 
@@ -145,14 +145,13 @@ def predict_and_update():
     # update the distribution
     if last_score is not None:
         reward = calculate_reward(last_score, prediction)
-        logging.debug(f"alpha values before update: {ts.alpha}")
+        #logging.debug(f"alpha values before update: {ts.alpha}")
    
         if reward > 0:
             ts.update(current_note, reward)
             update_message = f"+{reward:.4f} reward to note {current_note}"
             successful_notes_sequence.append(current_note)
             logging.debug(f"successful_notes_sequence appended with {current_note}")
-            print(successful_notes_sequence)
         else:
             if ts.alpha[current_note] - abs(reward) >= 1.0:
                 ts.update(current_note, reward)
@@ -189,9 +188,9 @@ def get_success_sequence():
     sequence = []
 
     for note in successful_notes_sequence:
-        print(note)
+        #print(note)
         sequence.append(note)  
-        print(sequence)
+        #print(sequence)
 
     # Convert elements to int for JSON serialization
     ser_sequence = [int(note) for note in sequence]
@@ -234,7 +233,7 @@ def get_rolling_statistics():
 def reset_distribution():
     global ts
     ts.reset()
-    logging.debug("distribution reset.")
+    #logging.debug("distribution reset.")
     save_ts_to_redis(ts)
     return jsonify({'status': 'distribution reset'})
 
