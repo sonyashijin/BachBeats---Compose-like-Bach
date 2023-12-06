@@ -244,6 +244,7 @@ def clear():
     successful_notes_sequence.clear()
     ts.reset()
     rolling_stats_history.clear()  # Clear the rolling stats history
+    redis_client.delete('thompson_sampling')
     return jsonify({'status': 'cleared everything'})
 
 @app.route('/')
