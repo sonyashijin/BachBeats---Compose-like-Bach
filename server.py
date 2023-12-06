@@ -11,7 +11,7 @@ from logistic_regression import LogisticRegression
 import redis
 import pickle
 
-redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379')
+redis_url = os.getenv('REDISCLOUD_URL', 'redis://localhost:6379')
 redis_client = redis.Redis.from_url(redis_url)
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -113,10 +113,11 @@ def view_distribution():
 
 @app.route('/predict', methods=['POST'])
 def predict_and_update():
-    global user_note_history
-    global model
-    global last_score
-    #global ts
+    global user_note_history, last_score, ts
+
+    ts_from_redis = get_ts_from_redis()
+    if ts_from_redis:
+        ts = ts_from_redis
 
     data = request.json
     logging.debug(f"Received data: {data}")
@@ -231,7 +232,10 @@ def get_rolling_statistics():
 
 @app.route('/reset_distribution', methods=['POST'])
 def reset_distribution():
+    global ts
     ts.reset()
+    logging.DEBUG("distribution reset.")
+    save_ts_to_redis(ts)
     return jsonify({'status': 'distribution reset'})
 
 @app.route('/clear', methods=['POST'])
@@ -249,4 +253,9 @@ def home():
 
 
 if __name__ == '__main__':
+    ts_from_redis = get_ts_from_redis()
+    if ts_from_redis:
+        ts = ts_from_redis
+    else:
+        ts = DirichletMultinomialThompsonSampling(num_arms=61)
     app.run(debug=True)
