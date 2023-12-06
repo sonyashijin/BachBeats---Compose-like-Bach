@@ -45,7 +45,7 @@ def get_ts_from_redis():
     serialized_ts = redis_client.get('thompson_sampling')
     if serialized_ts:
         return deserialize_ts(serialized_ts)
-    return None  # Handle the case where ts is not yet stored
+    return None  
 
 def load_and_train_model():
     global model
@@ -233,7 +233,7 @@ def get_rolling_statistics():
 def reset_distribution():
     global ts
     ts.reset()
-    logging.DEBUG("distribution reset.")
+    logging.debug("distribution reset.")
     save_ts_to_redis(ts)
     return jsonify({'status': 'distribution reset'})
 
@@ -245,7 +245,7 @@ def clear():
     ts.reset()
     rolling_stats_history.clear()  # Clear the rolling stats history
     redis_client.delete('thompson_sampling')
-    logging.DEBUG("TS object deleted from database")
+    logging.debug("TS object deleted from database")
     return jsonify({'status': 'cleared everything'})
 
 @app.route('/')
@@ -254,9 +254,5 @@ def home():
 
 
 if __name__ == '__main__':
-    ts_from_redis = get_ts_from_redis()
-    if ts_from_redis:
-        ts = ts_from_redis
-    else:
-        ts = DirichletMultinomialThompsonSampling(num_arms=61)
+    ts = DirichletMultinomialThompsonSampling(num_arms=61)
     app.run(debug=True)
