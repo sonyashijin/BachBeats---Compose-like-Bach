@@ -63,7 +63,7 @@ def load_and_train_model():
 # load and train data at start up
 load_and_train_model()
 
-def calculate_reward(initial_score, updated_score, max_change=1.5, weight_factor=10):
+def calculate_reward(initial_score, updated_score, max_change= 0.9, weight_factor=20):
     # calculate the difference in score
     score_change = updated_score - initial_score
 
