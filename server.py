@@ -138,7 +138,7 @@ def predict_and_update():
     intervals = np.diff(last_three_notes)
     avg_interval = np.mean(intervals) if len(intervals) > 0 else 0
 
-    # combine last three notes and avg_interval for input_features
+    # combine last two notes and current note and avg_interval for input_features
     input_features = np.append(last_three_notes, avg_interval).reshape(1, -1)
     prediction = model.predict_proba(input_features)[0]
 
