@@ -1,3 +1,3 @@
 # CS109 2023 Probability for Computer Scientists Challenge Grand Prize
-
+This project attempts to train a user to compose in Bach style by conducting reinforcement learning principles on the user while they play the piano. Through the visualization of the Dirichlet distribution, suggestions made with a revised Thompson Sampling algorithm for the Multinomial, and an updated probability score from a trained Logistic Regression model for every note, the user can observe successes and failures as they play. This real-time statistically-informed feedback slowly enables the user to make informed decisions of choosing notes in their composition. At the end of the session, the user is able to play their successful composition and reflect.
 Writeup - [https://www.overleaf.com/project/656e952e582079e55acbaf6e](https://www.overleaf.com/read/zcwrrqmffxjt#ee21c7)
